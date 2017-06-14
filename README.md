@@ -127,6 +127,14 @@ func getDhtTable(addr string, bootstrap []string, refresh time.Duration) (*dht.S
 			log.Printf("query %v %#v\n", source, query.Q)
 			return true // true or false ? unclear doc.
 		},
+		OnResponsePeer: func(query krpc.Msg, source dht.Addr) {
+			r := ""
+			if query.R != nil {
+				r = fmt.Sprintf("ret.V=%#v ret.Seq=%#v ret.K=%#v ret.Sign=%#v",
+					query.R.V, query.R.Seq, query.R.K, query.R.Sign)
+			}
+			log.Printf("response %v err=%v %v\n", source, query.Error(), r)
+		},
 	}
 	return dht.NewServer(conf)
 }

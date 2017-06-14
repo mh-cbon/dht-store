@@ -1,7 +1,6 @@
 package dhtstore
 
 import (
-	"log"
 	"time"
 
 	"github.com/anacrolix/dht"
@@ -76,9 +75,7 @@ func (s *ConnectedStore) Put(name, value string, seq, cas int, copyCnt ...int) (
 				s.store.Transact(func(store *Store) {
 					if err := putResponse.Error(); err != nil {
 						store.AddErr(key, err)
-						log.Println("put err ", err)
 					} else {
-						log.Println("put ok ", seq)
 						store.Add(name, value, copyCnt...)
 						store.UpdateReplicationCount(key, 1)
 						store.UpdateSeq(key, seq)
