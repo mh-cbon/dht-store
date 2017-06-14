@@ -1,9 +1,11 @@
 package dhtstore
 
 import (
+	"strings"
 	"time"
 
 	"github.com/anacrolix/dht"
+	"github.com/anacrolix/torrent/bencode"
 )
 
 func NewConnectedStore(table *dht.Server, keyer Keyer, store Storer) *ConnectedStore {
@@ -121,7 +123,8 @@ func (s *ConnectedStore) Fetch(key string, seq int, readCnt ...int) (string, err
 					if getResponse.Err != nil {
 						errs = append(errs, getResponse.Err)
 					} else {
-						val, decErr := getResponse.Msg.GetValue()
+						var val string
+						decErr := bencode.NewDecoder(strings.NewReader(getResponse.Msg.V)).Decode(&val)
 						if decErr != nil {
 							errs = append(errs, decErr)
 						} else if !done {
