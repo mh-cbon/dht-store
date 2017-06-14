@@ -30,3 +30,7 @@ go run main.go -port 9093 -get tomate -kname test -salt abc
 
 # don t forget the data timeout is set to 10 sec!
 ```
+
+# API example
+
+#### > {{cat "demo/main.go" | color "go"}}
